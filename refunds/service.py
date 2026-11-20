@@ -45,13 +45,14 @@ def build_statement(
     booking: BookingRecord,
     refund: int,
     tier_name: str,
-    adjustments: list[str] = [],
+    adjustments: list[str] | None = None,
 ) -> RefundStatement:
     """Assemble the statement the platform files against the cancellation."""
-    adjustments.append(f"settled under the {tier_name} tier")
+    notes = list(adjustments) if adjustments is not None else []
+    notes.append(f"settled under the {tier_name} tier")
     withheld = booking.price_as_booked_cents - refund
     if withheld > 0:
-        adjustments.append(
+        notes.append(
             f"withheld {format_cents(withheld)} of "
             f"{format_cents(booking.price_as_booked_cents)}"
         )
@@ -60,7 +61,7 @@ def build_statement(
         price_as_booked_cents=booking.price_as_booked_cents,
         refund_cents=refund,
         tier_name=tier_name,
-        adjustments=tuple(adjustments),
+        adjustments=tuple(notes),
     )
 
 
