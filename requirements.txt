@@ -1,1 +1,3 @@
-babel==2.9.0
+# Runtime dependencies of the refund service. None at the moment.
+# babel==2.9.0 was removed: nothing in refunds/ imports it, and that
+# version carried PYSEC-2021-421 (CVE-2021-42771).
